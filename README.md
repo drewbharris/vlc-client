@@ -61,7 +61,7 @@ vlc.progress
 vlc = VLC::Client.new(VLC::Server.new('localhost', 9595, false))
 ```
 
-# Playlist management
+##### Playlist management
 
 ```ruby
 
