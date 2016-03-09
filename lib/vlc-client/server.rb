@@ -83,7 +83,7 @@ module VLC
     def stop
       return nil if stopped?
 
-      Process.kill('INT', pid = @pid)
+      Process.kill('KILL', pid = @pid)
       @pid = NullObject.new
       @deamon = false
       pid
@@ -94,20 +94,20 @@ module VLC
       if ENV['OS'] == 'Windows_NT'
         # We don't have pgroup, and should write to NUL in case the env doesn't simulate /dev/null
         Process.spawn(headless? ? 'cvlc' : 'vlc',
-                             '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                             '--I', 'rc', '--rc-host', "#{@host}:#{@port}",
                              :in => 'NUL',
                              :out => 'NUL',
                              :err => 'NUL')
       elsif (/darwin/ =~ RUBY_PLATFORM) != nil
         Process.spawn('/Applications/VLC.app/Contents/MacOS/VLC',
-                      '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+                      '--I', 'rc', '--rc-host', "#{@host}:#{@port}",
                       :pgroup => detached,
                       :in => '/dev/null',
                       :out => '/dev/null',
                       :err => '/dev/null')
       else
-        Process.spawn(headless? ? 'cvlc' : 'vlc',
-                      '--extraintf', 'rc', '--rc-host', "#{@host}:#{@port}",
+        Process.spawn(headless? ? 'cvlc' : 'vlc', '-A', 'alsa,none', '--alsa-audio-device', 'default',
+                      '--I', 'rc', '--rc-host', "#{@host}:#{@port}",
                       :pgroup => detached,
                       :in => '/dev/null',
                       :out => '/dev/null',
